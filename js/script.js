@@ -3,20 +3,24 @@
 const firstOperand = +prompt('Enter first number');
 const secondOperand = +prompt('Enter second one');
 
-function sumCalc() {
-    return console.log(firstOperand + secondOperand);
+function addCalc() {
+    const addResult = firstOperand + secondOperand;
+    return console.log(`Result: ${firstOperand}+${secondOperand}=${addResult}`);
 }
 function subtractCalc() {
-    return console.log(firstOperand - secondOperand);
+    const subResult = firstOperand - secondOperand;
+    return console.log(`Result: ${firstOperand}-${secondOperand}=${subResult}`);
 }
 function multiplyCalc() {
-    return console.log(firstOperand * secondOperand);
+    const multResult = firstOperand * secondOperand;
+    return console.log(`Result: ${firstOperand}*${secondOperand}=${multResult}`);
 }
 function divisionCalc() {
-    return console.log(firstOperand / secondOperand);
+    const divResult = firstOperand / secondOperand;
+    return console.log(`Result: ${firstOperand}/${secondOperand}=${divResult}`);
 }
 
-sumCalc();
+addCalc();
 subtractCalc();
 multiplyCalc();
 divisionCalc();
