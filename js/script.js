@@ -6,13 +6,17 @@ const  secondOperand = +prompt('select second one');
 
 function promptCalc() {
     if(calc === 'add') {
-        alert(firstOperand + secondOperand);
+        const addResult = firstOperand + secondOperand;
+        alert(`${firstOperand} + ${secondOperand} = ${addResult}`);
     } else if(calc === 'sub') {
-        alert(firstOperand - secondOperand);
+        const subResult = firstOperand - secondOperand;
+        alert(`${firstOperand} - ${secondOperand} = ${subResult}`);
     } else if(calc === 'mult') {
-        alert(firstOperand * secondOperand);
+        const multResult = firstOperand * secondOperand;
+        alert(`${firstOperand} * ${secondOperand} = ${multResult}`);
     } else if(calc === 'div') {
-        alert(firstOperand / secondOperand);
+        const divResult = firstOperand / secondOperand;
+        alert(`${firstOperand} / ${secondOperand} = ${divResult}`);
     } else {
         alert('enter number please')
     }
