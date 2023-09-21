@@ -18,7 +18,7 @@ function promptCalc() {
         const divResult = firstOperand / secondOperand;
         alert(`${firstOperand} / ${secondOperand} = ${divResult}`);
     } else {
-        alert('enter number please')
+        alert('enter number please');
     }
 }
 
