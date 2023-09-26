@@ -4,26 +4,23 @@ const firstOperand = +prompt('Enter first number');
 const secondOperand = +prompt('Enter second one');
 
 function addCalc() {
-    const addResult = firstOperand + secondOperand;
-    return console.log(`Result: ${firstOperand}+${secondOperand}=${addResult}`);
+    return firstOperand + secondOperand;
 }
-function subtractCalc() {
-    const subResult = firstOperand - secondOperand;
-    return console.log(`Result: ${firstOperand}-${secondOperand}=${subResult}`);
+function subCalc() {
+    return firstOperand - secondOperand;
 }
-function multiplyCalc() {
-    const multResult = firstOperand * secondOperand;
-    return console.log(`Result: ${firstOperand}*${secondOperand}=${multResult}`);
+function multCalc() {
+    return firstOperand * secondOperand;
 }
-function divisionCalc() {
-    const divResult = firstOperand / secondOperand;
-    return console.log(`Result: ${firstOperand}/${secondOperand}=${divResult}`);
+function divCalc() {
+    return firstOperand / secondOperand;
 }
 
-addCalc();
-subtractCalc();
-multiplyCalc();
-divisionCalc();
+console.log(`Result: ${firstOperand} + ${secondOperand} = ${addCalc()}`);
+console.log(`Result: ${firstOperand} - ${secondOperand} = ${subCalc()}`);
+console.log(`Result: ${firstOperand} * ${secondOperand} = ${multCalc()}`);
+console.log(`Result: ${firstOperand} / ${secondOperand} = ${divCalc()}`);
+
 
 
 
