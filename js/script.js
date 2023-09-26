@@ -7,18 +7,18 @@ const  secondOperand = +prompt('select second one');
 function promptCalc() {
     if(calc === 'add') {
         const addResult = firstOperand + secondOperand;
-        alert(`${firstOperand} + ${secondOperand} = ${addResult}`);
+        return alert(`${firstOperand} + ${secondOperand} = ${addResult}`);
     } else if(calc === 'sub') {
         const subResult = firstOperand - secondOperand;
-        alert(`${firstOperand} - ${secondOperand} = ${subResult}`);
+        return alert(`${firstOperand} - ${secondOperand} = ${subResult}`);
     } else if(calc === 'mult') {
         const multResult = firstOperand * secondOperand;
-        alert(`${firstOperand} * ${secondOperand} = ${multResult}`);
+        return alert(`${firstOperand} * ${secondOperand} = ${multResult}`);
     } else if(calc === 'div') {
         const divResult = firstOperand / secondOperand;
-        alert(`${firstOperand} / ${secondOperand} = ${divResult}`);
+        return alert(`${firstOperand} / ${secondOperand} = ${divResult}`);
     } else {
-        alert('enter number please');
+        return alert('enter number please');
     }
 }
 
