@@ -6,8 +6,8 @@ Boolean(Number('10')) + 1;
 
 'sub' + Number(false);
 // Number(false) = 0, string + number = string, 'sub' + 0 = 'sub0'
-// Ответ: 'sub0
-// '
+// Ответ: 'sub0'
+
 16 * '91'
 // Number * string = Number, 16 * '91' = 1456
 // Ответ: 1456
