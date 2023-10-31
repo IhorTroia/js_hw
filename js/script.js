@@ -5,11 +5,11 @@ console.log(positiveArr, positiveArr.length);
 
 console.log(positiveArr.reduce((sum, current) => sum + current, 0));
 
-console.log(Math.min.apply(null, arr));
+console.log(Math.min(...arr));
 
 console.log(arr.indexOf(-63));
 
-console.log(Math.max.apply(null, arr));
+console.log(Math.max(...arr));
 
 console.log(arr.indexOf(76));
 
@@ -28,7 +28,7 @@ console.log(oddArr.reduce((sum, current) => sum + current, 0));
 
 console.log(positiveArr.reduce((sum, current) => sum * current));
 
-const maxNum = Math.max.apply(null, arr);
+const maxNum = Math.max(...arr);
 
 arr.forEach((element, index) => {
   if (element !== maxNum) {
