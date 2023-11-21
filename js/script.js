@@ -1,13 +1,5 @@
-const menu = {
-  width: 200,
-  height: 300,
-  title: 'My menu',
-};
-
-for (const key in menu) {
-  if (typeof menu[key] === 'number') {
-    menu[key] *= 2;
-  }
+function min(a, b) {
+  return (a < b) ? a : b;
 }
 
-console.log(menu);
+console.log(min(3, -1));
