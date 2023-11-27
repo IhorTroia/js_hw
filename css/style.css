@@ -1,0 +1,9 @@
+.input {
+  text-align: center;
+}
+
+[data-msg-error] {
+  display: none;
+  color: blueviolet;
+  background: chartreuse;
+}
