@@ -1,0 +1,56 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gallery img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal img {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.tabs {
+  display: flex;
+  cursor: pointer;
+}
+
+.tab {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-bottom: none;
+}
+
+.tab:hover {
+  background-color: #f0f0f0;
+}
+
+.tab-content {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.tab-content.active {
+  display: block;
+}
