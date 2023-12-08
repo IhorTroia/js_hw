@@ -1,4 +1,3 @@
 (() => {
-  const currentImage = Math.floor(Math.random() * 9 + 1);
-  document.querySelector('[data-img]').src = `./images/${currentImage}.jpg`;
+  document.querySelector('[data-img]').src = `./images/${Math.floor(Math.random() * 9) + 1}.jpg`;
 })();
