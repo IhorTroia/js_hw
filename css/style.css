@@ -1,0 +1,7 @@
+.ghost {
+  background: #000;
+  color: chartreuse;
+  width: 100px;
+  height: 20px;
+  display: none;
+}
