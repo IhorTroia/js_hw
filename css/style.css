@@ -1,12 +1,13 @@
 .gallery {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
+  margin-bottom: 60px;
 }
 
 .gallery img {
-  width: 150px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   cursor: pointer;
 }
@@ -30,27 +31,25 @@
 
 .tabs {
   display: flex;
-  cursor: pointer;
+  justify-content: center;
+  gap: 15px;
+  background: aquamarine;
 }
 
 .tab {
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-bottom: none;
+  cursor: pointer;
 }
 
 .tab:hover {
-  background-color: #f0f0f0;
+  background: #000;
+  color: aquamarine;
 }
 
 .tab-content {
   display: none;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-top: none;
+  text-align: center;
 }
 
-.tab-content.active {
+.active {
   display: block;
 }

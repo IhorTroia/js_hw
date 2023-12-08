@@ -6,7 +6,7 @@
     <title>hw</title>
   </head>
   <body>
-    <div class="gallery" id="imageGallery">
+    <div data-gallery class="gallery">
       <img src="./images/1.jpg" alt="pic1" />
       <img src="./images/2.jpg" alt="pic2" />
       <img src="./images/3.jpg" alt="pic3" />
@@ -16,27 +16,37 @@
       <img src="./images/7.jpg" alt="pic3" />
       <img src="./images/8.jpg" alt="pic3" />
     </div>
-    <div class="modal" id="modal">
-      <img id="modalImage" alt="Велике зображення" />
+    <div data-modal class="modal">
+      <img data-modal-img src="" alt="Big one" />
     </div>
 
-    <div class="tabs" id="tabs">
-      <div class="tab" onclick="showTab('tab1')">Tab 1</div>
-      <div class="tab" onclick="showTab('tab2')">Tab 2</div>
-      <div class="tab" onclick="showTab('tab3')">Tab 3</div>
+    <div class="tabs">
+      <div class="tab">
+        <h2>TAB1</h2>
+      </div>
+      <div class="tab">
+        <h2>TAB2</h2>
+      </div>
+      <div class="tab">
+        <h2>TAB3</h2>
+      </div>
     </div>
 
-    <div class="tab-content" id="tab1Content">
-      <p>tab 1 inner</p>
-    </div>
-
-    <div class="tab-content" id="tab2Content">
-      <p>tab 2 inner</p>
-    </div>
-
-    <div class="tab-content" id="tab3Content">
-      <p>tab 3 inner</p>
-    </div>
+    <ul class="tab-content active">
+      <li>item1.1</li>
+      <li>item1.2</li>
+      <li>item1.3</li>
+    </ul>
+    <ul class="tab-content">
+      <li>item2.1</li>
+      <li>item2.2</li>
+      <li>item2.3</li>
+    </ul>
+    <ul class="tab-content">
+      <li>item3.1</li>
+      <li>item3.2</li>
+      <li>item3.3</li>
+    </ul>
 
     <script src="./js/script.js"></script>
   </body>
