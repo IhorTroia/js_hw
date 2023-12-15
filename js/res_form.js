@@ -1,6 +1,5 @@
 (() => {
-  let data = localStorage.getItem('formData');
-  data = JSON.parse(data);
+  const data = JSON.parse(localStorage.getItem('formData'));
   if (data === null) {
     return alert(
       'Local Storage is Empty. Submit the form to show the data on the page.',
@@ -15,4 +14,6 @@
     li.textContent = `${key}: ${data[key]}`;
     ul.appendChild(li);
   }
+
+  return ul;
 })();
