@@ -1,88 +1,71 @@
-(function () {
-  const saveData = (key, data = null) => {
-    localStorage.setItem(key, JSON.stringify(data));
-    return data;
+(() => {
+  const theme = {
+    bg: 'light',
   };
 
-  const getData = (key) => {
-    let data = localStorage.getItem(key);
-    data = JSON.parse(data);
-    return data;
+  const saveTheme = () => {
+    localStorage.setItem('theme', JSON.stringify(theme));
   };
 
-  const restoreFromState = () => {
-    const data = getLocalStore();
-    const btns = document.querySelectorAll('[data-id]');
-    btns.forEach((btn) => {
-      const id = btn.getAttribute('data-id');
-      if (data.hasOwnProperty(id)) {
-        console.log(data);
-        btn.classList.toggle('disabled');
-      }
-    });
-  };
+  const prefillTheme = () => {
+    const lightBtn = document.querySelector('#flexRadioDefault1');
+    const darkBtn = document.querySelector('#flexRadioDefault2');
+    const currentTheme = JSON.parse(localStorage.getItem('theme'));
 
-  const getLocalStore = () => {
-    const result = localStorage.getItem('result');
-    return result === null ? {} : JSON.parse(result);
-  };
-
-  const changingBtnsState = (event) => {
-    const parentElement = event.target.parentNode;
-    const btns = parentElement.querySelectorAll('.btn');
-    btns.forEach((btn) => {
-      btn.classList.toggle('disabled');
-    });
-  };
-
-  const addBtnHandler = (event) => {
-    const { target } = event;
-    if (
-      target.classList.contains('btn-success')
-        || target.classList.contains('btn-danger')
-    ) {
-      const data = getLocalStore();
-      const id = event.target.getAttribute('data-id');
-      if (data.hasOwnProperty(id)) {
-        for (const key in data) {
-          if (id === key) {
-            delete data[key];
-          }
-        }
-      } else {
-        data[id] = target.textContent;
-      }
-      changingBtnsState(event);
-      localStorage.setItem('result', JSON.stringify(data));
+    if (currentTheme.bg === 'dark') {
+      lightBtn.removeAttribute('checked');
+      darkBtn.setAttribute('checked', '');
+      document.body.setAttribute('class', 'bg-dark');
+    }
+    if (currentTheme.bg === 'light') {
+      darkBtn.removeAttribute('checked');
+      lightBtn.setAttribute('checked', '');
     }
   };
 
-  const changeBackground = (body) => {
-    const data = getData('background');
-    if (data === null) return;
-    const { background } = data;
-    body.classList.add(...background.split(' '));
+  const formHandler = (e) => {
+    const { body } = document;
+    const { target } = e;
+
+    if (target.hasAttribute('data-dark')) {
+      body.setAttribute('class', 'bg-dark');
+      theme.bg = 'dark';
+    }
+    if (target.hasAttribute('data-light')) {
+      body.removeAttribute('class');
+      theme.bg = 'light';
+    }
+    saveTheme();
   };
 
-  const selectHandler = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    const {
-      target: { value },
-    } = event;
-    const data = {};
-    data.background = value;
-    saveData('background', data);
-  };
-  const loadedHandler = (event) => {
-    const select = document.querySelector('select');
-    const body = document.querySelector('body');
-    changeBackground(body);
-    select.addEventListener('change', selectHandler);
-    restoreFromState();
-    const ul = document.querySelector('[data-list-group]');
-    ul.addEventListener('click', addBtnHandler);
+  const ulHandler = (e) => {
+    e.stopPropagation();
+    const { target } = e;
+    if (!target.hasAttribute('data-btn-add') && !target.hasAttribute('data-btn-remove')) return;
+
+    if (target.hasAttribute('data-btn-add')) {
+      target.classList.remove('btn-success');
+      target.classList.add('btn-danger');
+      target.removeAttribute('data-btn-add');
+      target.setAttribute('data-btn-remove', '');
+      target.textContent = 'Remove from Fav';
+      // элемент сконвертировать в строку, запушить в массив и дальше хз
+    } else if (target.hasAttribute('data-btn-remove')) {
+      target.classList.remove('btn-danger');
+      target.classList.add('btn-success');
+      target.removeAttribute('data-btn-remove');
+      target.setAttribute('data-btn-add', '');
+      target.textContent = 'Add to Fav';
+    }
   };
 
+  const loadedHandler = () => {
+    prefillTheme();
+    const form = document.querySelector('form');
+    const ul = document.querySelector('ul');
+
+    form.addEventListener('change', formHandler);
+    ul.addEventListener('click', ulHandler);
+  };
   document.addEventListener('DOMContentLoaded', loadedHandler);
-}());
+})();
