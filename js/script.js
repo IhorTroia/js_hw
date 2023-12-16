@@ -2,9 +2,19 @@
   const theme = {
     bg: 'light',
   };
+  const favItems = {};
 
   const saveTheme = () => {
     localStorage.setItem('theme', JSON.stringify(theme));
+  };
+
+  const saveItems = () => {
+    const ul = document.querySelector('ul');
+    const buttons = ul.querySelectorAll('button');
+    buttons.forEach((button) => {
+      favItems[button.name] = button.className;
+    });
+    localStorage.setItem('items', JSON.stringify(favItems));
   };
 
   const prefillTheme = () => {
@@ -20,6 +30,24 @@
     if (currentTheme.bg === 'light') {
       darkBtn.removeAttribute('checked');
       lightBtn.setAttribute('checked', '');
+    }
+  };
+
+  const prefillItems = () => {
+    const currentItems = JSON.parse(localStorage.getItem('items'));
+    const ul = document.querySelector('ul');
+    const buttons = ul.querySelectorAll('button');
+    for (const currentItemsKey in currentItems) {
+      if (currentItems[currentItemsKey] === 'btn btn-danger') {
+        console.log(currentItems[currentItemsKey]);
+        buttons.forEach((item) => {
+          if (item.name === currentItemsKey) {
+            item.classList.remove('btn-success');
+            item.classList.add('btn-danger');
+            item.textContent = 'Remove from Fav';
+          }
+        });
+      }
     }
   };
 
@@ -41,26 +69,23 @@
   const ulHandler = (e) => {
     e.stopPropagation();
     const { target } = e;
-    if (!target.hasAttribute('data-btn-add') && !target.hasAttribute('data-btn-remove')) return;
+    if (!target.classList.contains('btn-success') && !target.classList.contains('btn-danger')) return;
 
-    if (target.hasAttribute('data-btn-add')) {
+    if (target.classList.contains('btn-success')) {
       target.classList.remove('btn-success');
       target.classList.add('btn-danger');
-      target.removeAttribute('data-btn-add');
-      target.setAttribute('data-btn-remove', '');
       target.textContent = 'Remove from Fav';
-      // элемент сконвертировать в строку, запушить в массив и дальше хз
-    } else if (target.hasAttribute('data-btn-remove')) {
+    } else if (target.classList.contains('btn-danger')) {
       target.classList.remove('btn-danger');
       target.classList.add('btn-success');
-      target.removeAttribute('data-btn-remove');
-      target.setAttribute('data-btn-add', '');
       target.textContent = 'Add to Fav';
     }
+    saveItems();
   };
 
   const loadedHandler = () => {
     prefillTheme();
+    prefillItems();
     const form = document.querySelector('form');
     const ul = document.querySelector('ul');
 
