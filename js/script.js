@@ -2,6 +2,7 @@
   const theme = {
     bg: 'light',
   };
+
   const favItems = {};
 
   const saveTheme = () => {
@@ -9,10 +10,9 @@
   };
 
   const saveItems = () => {
-    const ul = document.querySelector('ul');
-    const buttons = ul.querySelectorAll('button');
+    const buttons = document.querySelectorAll('ul button');
     buttons.forEach((button) => {
-      favItems[button.name] = button.className;
+      favItems[button.name] = button.classList.contains('btn-danger') ? 'btn btn-danger' : 'btn btn-success';
     });
     localStorage.setItem('items', JSON.stringify(favItems));
   };
@@ -22,65 +22,40 @@
     const darkBtn = document.querySelector('#flexRadioDefault2');
     const currentTheme = JSON.parse(localStorage.getItem('theme'));
 
-    if (currentTheme.bg === 'dark') {
-      lightBtn.removeAttribute('checked');
-      darkBtn.setAttribute('checked', '');
-      document.body.setAttribute('class', 'bg-dark');
-    }
-    if (currentTheme.bg === 'light') {
-      darkBtn.removeAttribute('checked');
-      lightBtn.setAttribute('checked', '');
-    }
+    lightBtn.checked = currentTheme.bg !== 'dark';
+    darkBtn.checked = currentTheme.bg === 'dark';
+    document.body.classList.toggle('bg-dark', currentTheme.bg === 'dark');
   };
 
   const prefillItems = () => {
     const currentItems = JSON.parse(localStorage.getItem('items'));
-    const ul = document.querySelector('ul');
-    const buttons = ul.querySelectorAll('button');
-    for (const currentItemsKey in currentItems) {
-      if (currentItems[currentItemsKey] === 'btn btn-danger') {
-        console.log(currentItems[currentItemsKey]);
-        buttons.forEach((item) => {
-          if (item.name === currentItemsKey) {
-            item.classList.remove('btn-success');
-            item.classList.add('btn-danger');
-            item.textContent = 'Remove from Fav';
-          }
-        });
-      }
-    }
+    const buttons = document.querySelectorAll('ul button');
+
+    buttons.forEach((item) => {
+      const isDanger = currentItems[item.name] === 'btn btn-danger';
+      item.classList.toggle('btn-success', !isDanger);
+      item.classList.toggle('btn-danger', isDanger);
+      item.textContent = isDanger ? 'Remove from Fav' : 'Add to Fav';
+    });
   };
 
-  const formHandler = (e) => {
+  const formHandler = ({ target }) => {
     const { body } = document;
-    const { target } = e;
-
-    if (target.hasAttribute('data-dark')) {
-      body.setAttribute('class', 'bg-dark');
-      theme.bg = 'dark';
-    }
-    if (target.hasAttribute('data-light')) {
-      body.removeAttribute('class');
-      theme.bg = 'light';
-    }
+    body.classList.toggle('bg-dark', target.hasAttribute('data-dark'));
+    theme.bg = target.hasAttribute('data-dark') ? 'dark' : 'light';
     saveTheme();
   };
 
   const ulHandler = (e) => {
     e.stopPropagation();
     const { target } = e;
-    if (!target.classList.contains('btn-success') && !target.classList.contains('btn-danger')) return;
 
-    if (target.classList.contains('btn-success')) {
-      target.classList.remove('btn-success');
-      target.classList.add('btn-danger');
-      target.textContent = 'Remove from Fav';
-    } else if (target.classList.contains('btn-danger')) {
-      target.classList.remove('btn-danger');
-      target.classList.add('btn-success');
-      target.textContent = 'Add to Fav';
+    if (target.classList.contains('btn-success') || target.classList.contains('btn-danger')) {
+      target.classList.toggle('btn-success');
+      target.classList.toggle('btn-danger');
+      target.textContent = target.classList.contains('btn-danger') ? 'Remove from Fav' : 'Add to Fav';
+      saveItems();
     }
-    saveItems();
   };
 
   const loadedHandler = () => {
@@ -92,5 +67,6 @@
     form.addEventListener('change', formHandler);
     ul.addEventListener('click', ulHandler);
   };
+
   document.addEventListener('DOMContentLoaded', loadedHandler);
 })();
