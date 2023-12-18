@@ -35,7 +35,7 @@
         localStorage.setItem(CONSTANTS.dataKey, JSON.stringify(savedElements));
         return removedElement;
       } catch (e) {
-        console.log('Cannot remove element', removedElement);
+        console.error(`${removedElement} cannot be removed`);
         return false;
       }
     },
@@ -68,6 +68,16 @@
       taskWrapper.className = 'taskWrapper';
       wrapper.appendChild(taskWrapper);
 
+      const btnContainer = document.createElement('div');
+      btnContainer.className = 'text-end';
+      taskWrapper.appendChild(btnContainer);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-sm btn-danger';
+      deleteBtn.innerText = 'X';
+      deleteBtn.setAttribute('data-remove-btn', '');
+      btnContainer.appendChild(deleteBtn);
+
       const taskHeading = document.createElement('div');
       taskHeading.className = 'taskHeading';
       taskHeading.innerHTML = data.title;
@@ -77,12 +87,6 @@
       taskDescription.className = 'taskDescription';
       taskDescription.innerHTML = data.description;
       taskWrapper.appendChild(taskDescription);
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'btn btn-sm btn-danger';
-      deleteBtn.innerText = 'X';
-      deleteBtn.setAttribute('data-remove-btn', '');
-      taskWrapper.appendChild(deleteBtn);
 
       return wrapper;
     },
@@ -100,11 +104,12 @@
       e.preventDefault();
       e.stopPropagation();
       const { target } = e;
-      const data = Array.from(target.querySelectorAll('input, textarea'))
-        .reduce((acc, item) => {
-          acc[item.name] = item.value;
-          return acc;
-        }, {});
+      const data = {};
+
+      const inputs = target.querySelectorAll('input, textarea');
+      inputs.forEach((input) => {
+        if (input.value !== '') data[input.name] = input.value;
+      });
 
       const savedData = model.save(data);
 
@@ -126,7 +131,7 @@
         return;
       }
 
-      alert(`Cannot remove element ${removedElement.title}`);
+      alert(`${removedElement.title} cannot be removed`);
     },
 
     loadedHandler() {
