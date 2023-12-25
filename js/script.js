@@ -6,7 +6,15 @@
   });
 
   const model = {
-    currentId: 0,
+    currentUserId: 0,
+
+    set currentId(id) {
+      this.currentUserId = id;
+    },
+
+    get currentId() {
+      return this.currentUserId;
+    },
 
     save(data) {
       this.currentId += 1;
