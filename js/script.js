@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
   const attendanceEx1 = new Array(25).fill(null);
   const attendanceEx2 = new Array(25).fill(null);
