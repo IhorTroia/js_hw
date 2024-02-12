@@ -1,65 +1,69 @@
-(() => {
-  const creator = (data) => {
+(function () {
+  const createTemplate = (data) => {
     const wrapper = document.createElement('div');
-    wrapper.className = 'todoContainer';
-    wrapper.setAttribute('data-wrapper', '');
+    wrapper.className = 'col-4';
+    wrapper.setAttribute('data-todo-item', '');
 
-    const title = document.createElement('div');
-    title.className = 'title';
-    wrapper.appendChild(title);
-    title.textContent = data.head;
+    const taskWrapper = document.createElement('div');
+    taskWrapper.className = 'taskWrapper';
+    wrapper.appendChild(taskWrapper);
 
-    const desc = document.createElement('div');
-    desc.className = 'desc';
-    wrapper.appendChild(desc);
-    desc.textContent = data.desc;
+    const taskHeading = document.createElement('div');
+    taskHeading.className = 'taskHeading';
+    taskHeading.innerHTML = data.title;
+    taskWrapper.appendChild(taskHeading);
 
-    const removeBtn = document.createElement('button');
-    removeBtn.className = 'removeBtn';
-    removeBtn.textContent = 'x';
-    removeBtn.setAttribute('data-btn', '');
-    wrapper.appendChild(removeBtn);
+    const taskDescription = document.createElement('div');
+    taskDescription.className = 'taskDescription';
+    taskDescription.innerHTML = data.description;
+    taskWrapper.appendChild(taskDescription);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-sm btn-danger';
+    deleteBtn.innerText = 'X';
+    deleteBtn.setAttribute('data-remove-btn', '');
+    taskWrapper.appendChild(deleteBtn);
 
     return wrapper;
   };
 
-  const render = (template) => {
-    const container = document.querySelector('.right');
-    container.prepend(template);
-  };
-
-  const removeHandler = (e) => {
-    e.stopPropagation();
-    const { target } = e;
-    if (target.hasAttribute('data-btn')) {
-      target.closest('[data-wrapper]').remove();
-    }
+  const renderTodoItem = (elementToRender) => {
+    const todoContainer = document.querySelector('#todoItems');
+    todoContainer.prepend(elementToRender);
+    return elementToRender;
   };
 
   const formHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     const { target } = e;
-    const data = {};
-    const inputs = target.querySelectorAll('input, textarea');
+    const data = Array.from(target.querySelectorAll('input, textarea'))
+      .reduce((acc, item) => {
+        acc[item.name] = item.value;
+        return acc;
+      }, {});
 
-    inputs.forEach((item) => {
-      if (item.value !== '') data[item.name] = item.value;
-    });
-
-    const HTMLTemplate = creator(data);
-    render(HTMLTemplate);
+    const HTMLTemplate = createTemplate(data);
+    renderTodoItem(HTMLTemplate);
     target.reset();
   };
 
+  const removeTodoItemHandler = (e) => {
+    e.stopPropagation();
+    const { target } = e;
+    if (!target.hasAttribute('data-remove-btn')) return;
+    const removedEl = target.closest('[data-todo-item]');
+    removedEl.remove();
+    return removedEl;
+  };
+
   const loadedHandler = () => {
-    const form = document.querySelector('#TodoItems');
-    const container = document.querySelector('.right');
+    const form = document.querySelector('#todoForm');
+    const todoContainer = document.querySelector('#todoItems');
 
     form.addEventListener('submit', formHandler);
-    container.addEventListener('click', removeHandler);
+    todoContainer.addEventListener('click', removeTodoItemHandler);
   };
 
   document.addEventListener('DOMContentLoaded', loadedHandler);
-})();
+}());
