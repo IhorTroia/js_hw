@@ -1,69 +1,147 @@
 (function () {
-  const createTemplate = (data) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'col-4';
-    wrapper.setAttribute('data-todo-item', '');
+  const CONSTANTS = Object.freeze({
+    formSelector: '#todoForm',
+    todoContainerSelector: '#todoItems',
+    todoItemAttr: 'data-todo-item',
+    btnRemoveAttr: 'data-remove-btn',
+    dataKey: 'formData',
+  });
 
-    const taskWrapper = document.createElement('div');
-    taskWrapper.className = 'taskWrapper';
-    wrapper.appendChild(taskWrapper);
+  const model = {
+    currentId: 0,
 
-    const taskHeading = document.createElement('div');
-    taskHeading.className = 'taskHeading';
-    taskHeading.innerHTML = data.title;
-    taskWrapper.appendChild(taskHeading);
+    save(data) {
+      this.currentId += 1;
 
-    const taskDescription = document.createElement('div');
-    taskDescription.className = 'taskDescription';
-    taskDescription.innerHTML = data.description;
-    taskWrapper.appendChild(taskDescription);
+      const dataCopy = { id: this.currentId, ...data };
+      const savedData = this.get();
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-sm btn-danger';
-    deleteBtn.innerText = 'X';
-    deleteBtn.setAttribute('data-remove-btn', '');
-    taskWrapper.appendChild(deleteBtn);
+      savedData.push(dataCopy);
 
-    return wrapper;
+      try {
+        localStorage.setItem(CONSTANTS.dataKey, JSON.stringify(savedData));
+        return this.get().at(-1);
+      } catch (e) {
+        return false;
+      }
+    },
+
+    removeElementById(todoId) {
+      const savedData = this.get();
+      const index = savedData.findIndex(({ id }) => todoId === id);
+
+      const [removedElement] = savedData.splice(index, 1);
+
+      try {
+        localStorage.setItem(CONSTANTS.dataKey, JSON.stringify(savedData));
+        return removedElement;
+      } catch (e) {
+        console.log('Cannot remove element', removedElement);
+        return false;
+      }
+    },
+
+    get() {
+      const savedData = JSON.parse(localStorage.getItem(CONSTANTS.dataKey));
+
+      return savedData || [];
+    },
+
+    initId() {
+      const data = this.get();
+      if (!data.length) return;
+      this.currentId = +data.at(-1).id;
+    },
   };
 
-  const renderTodoItem = (elementToRender) => {
-    const todoContainer = document.querySelector('#todoItems');
-    todoContainer.prepend(elementToRender);
-    return elementToRender;
+  const view = {
+    renderElement(data) {
+      const template = this.createTemplate(data);
+      this.renderTodoItem(template);
+    },
+
+    renderTodoItem(elementToRender) {
+      const todoContainer = document.querySelector(CONSTANTS.todoContainerSelector);
+      todoContainer.prepend(elementToRender);
+      return elementToRender;
+    },
+
+    createTemplate(data) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'col-4';
+      wrapper.setAttribute(CONSTANTS.todoItemAttr, data.id);
+      wrapper.innerHTML = `<div class="taskWrapper">
+                              <div class="taskHeading">${data.title}</div>
+                              <div class="taskDescription">${data.description}</div>
+                              <button data-remove-btn class="btn btn-sm btn-danger">X</button>
+                           </div>`;
+
+      return wrapper;
+    },
+
+    resetForm() {
+      document.querySelector(CONSTANTS.formSelector).reset();
+    },
+
+    removeElement(todoId) {
+      document.querySelector(`[data-todo-item="${todoId}"]`).remove();
+    },
   };
 
-  const formHandler = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { target } = e;
-    const data = Array.from(target.querySelectorAll('input, textarea'))
-      .reduce((acc, item) => {
-        acc[item.name] = item.value;
-        return acc;
-      }, {});
+  const controller = {
 
-    const HTMLTemplate = createTemplate(data);
-    renderTodoItem(HTMLTemplate);
-    target.reset();
+    formHandler(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const { target } = e;
+      const data = {};
+
+      const inputs = target.querySelectorAll('input, textarea');
+
+      inputs.forEach((input) => {
+        if (input.value !== '') data[input.name] = input.value;
+      });
+
+      const savedData = model.save(data);
+
+      if (savedData) {
+        view.renderElement(savedData);
+        view.resetForm();
+      }
+    },
+
+    loadedHandler() {
+      model.initId();
+
+      const form = document.querySelector(CONSTANTS.formSelector);
+      const todoContainer = document.querySelector(CONSTANTS.todoContainerSelector);
+
+      form.addEventListener('submit', this.formHandler.bind(this));
+      todoContainer.addEventListener('click', this.removeHandler.bind(this));
+
+      model.get().forEach((item) => view.renderElement(item));
+    },
+
+    removeHandler(e) {
+      e.stopPropagation();
+      const { target } = e;
+      if (!target.hasAttribute(CONSTANTS.btnRemoveAttr)) return;
+
+      const todoId = +target.closest('[data-todo-item]').getAttribute(CONSTANTS.todoItemAttr);
+      const removedElement = model.removeElementById(todoId);
+
+      if (removedElement) {
+        view.removeElement(todoId);
+        return;
+      }
+      alert('Cannot remove element');
+    },
+
+    init() {
+      document.addEventListener('DOMContentLoaded', this.loadedHandler.bind(this));
+    },
   };
 
-  const removeTodoItemHandler = (e) => {
-    e.stopPropagation();
-    const { target } = e;
-    if (!target.hasAttribute('data-remove-btn')) return;
-    const removedEl = target.closest('[data-todo-item]');
-    removedEl.remove();
-    return removedEl;
-  };
-
-  const loadedHandler = () => {
-    const form = document.querySelector('#todoForm');
-    const todoContainer = document.querySelector('#todoItems');
-
-    form.addEventListener('submit', formHandler);
-    todoContainer.addEventListener('click', removeTodoItemHandler);
-  };
-
-  document.addEventListener('DOMContentLoaded', loadedHandler);
+  controller.init();
 }());
