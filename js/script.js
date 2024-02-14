@@ -10,6 +10,10 @@
   const model = {
     currentId: 0,
 
+    get data() {
+      return JSON.parse(localStorage.getItem(CONSTANTS.dataKey)) || [];
+    },
+
     save(data) {
       this.currentId += 1;
 
@@ -53,6 +57,8 @@
       this.currentId = +data.at(-1).id;
     },
   };
+
+  console.log(model.data);
 
   const view = {
     renderElement(data) {
