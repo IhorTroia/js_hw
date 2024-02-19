@@ -1,153 +1,57 @@
-(function () {
-  const CONSTANTS = Object.freeze({
-    formSelector: '#todoForm',
-    todoContainerSelector: '#todoItems',
-    todoItemAttr: 'data-todo-item',
-    btnRemoveAttr: 'data-remove-btn',
-    dataKey: 'formData',
-  });
+function Student(name, surname, birthYear, lessonsCount = 25) {
+  const gradeSettings = {
+    min: 0,
+    max: 100,
+  };
 
-  const model = {
-    currentId: 0,
+  let currentLesson = 0;
 
-    get data() {
-      return JSON.parse(localStorage.getItem(CONSTANTS.dataKey)) || [];
+  function checkAttendance(lessonVisited = true) {
+    if (typeof lessonVisited !== 'boolean') throw new Error('Error');
+    if (currentLesson >= lessonsCount) return console.log('cannot');
+    this.attendance[currentLesson] = lessonVisited;
+    currentLesson += 1;
+  }
+
+  function setGrade(grade) {
+    if (typeof grade !== 'number') throw new Error('Not num');
+    if (grade > gradeSettings.max || grade < gradeSettings.min) throw new Error('Invalid num');
+
+    const currentLessonIndex = currentLesson - 1;
+    if (!this.attendance[currentLessonIndex]) throw new Error('Absent');
+
+    this.grades[currentLessonIndex] = grade;
+  }
+
+  return {
+    name,
+    surname,
+    birthYear,
+    grades: new Array(lessonsCount),
+    attendance: new Array(lessonsCount),
+
+    getAge() {
+      console.log(2024 - this.birthYear);
     },
-
-    save(data) {
-      this.currentId += 1;
-
-      const dataCopy = { id: this.currentId, ...data };
-      const savedData = this.get();
-
-      savedData.push(dataCopy);
-
-      try {
-        localStorage.setItem(CONSTANTS.dataKey, JSON.stringify(savedData));
-        return this.get().at(-1);
-      } catch (e) {
-        return false;
-      }
+    present() {
+      checkAttendance.call(this);
     },
-
-    removeElementById(todoId) {
-      const savedData = this.get();
-      const index = savedData.findIndex(({ id }) => todoId === id);
-
-      const [removedElement] = savedData.splice(index, 1);
-
-      try {
-        localStorage.setItem(CONSTANTS.dataKey, JSON.stringify(savedData));
-        return removedElement;
-      } catch (e) {
-        console.log('Cannot remove element', removedElement);
-        return false;
-      }
+    absent() {
+      checkAttendance.call(this, false);
     },
-
-    get() {
-      const savedData = JSON.parse(localStorage.getItem(CONSTANTS.dataKey));
-
-      return savedData || [];
-    },
-
-    initId() {
-      const data = this.get();
-      if (!data.length) return;
-      this.currentId = +data.at(-1).id;
+    setGrade(grade) {
+      setGrade.call(this, grade);
     },
   };
 
-  console.log(model.data);
+  // Student.prototype.getAvgGrade = function () {};
+  // Student.prototype.getAvgAttendance = function () {};
+  //
+  // Student.prototype.getSummary = function () {};
+}
 
-  const view = {
-    renderElement(data) {
-      const template = this.createTemplate(data);
-      this.renderTodoItem(template);
-    },
-
-    renderTodoItem(elementToRender) {
-      const todoContainer = document.querySelector(CONSTANTS.todoContainerSelector);
-      todoContainer.prepend(elementToRender);
-      return elementToRender;
-    },
-
-    createTemplate(data) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'col-4';
-      wrapper.setAttribute(CONSTANTS.todoItemAttr, data.id);
-      wrapper.innerHTML = `<div class="taskWrapper">
-                              <div class="taskHeading">${data.title}</div>
-                              <div class="taskDescription">${data.description}</div>
-                              <button data-remove-btn class="btn btn-sm btn-danger">X</button>
-                           </div>`;
-
-      return wrapper;
-    },
-
-    resetForm() {
-      document.querySelector(CONSTANTS.formSelector).reset();
-    },
-
-    removeElement(todoId) {
-      document.querySelector(`[data-todo-item="${todoId}"]`).remove();
-    },
-  };
-
-  const controller = {
-
-    formHandler(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const { target } = e;
-      const data = {};
-
-      const inputs = target.querySelectorAll('input, textarea');
-
-      inputs.forEach((input) => {
-        if (input.value !== '') data[input.name] = input.value;
-      });
-
-      const savedData = model.save(data);
-
-      if (savedData) {
-        view.renderElement(savedData);
-        view.resetForm();
-      }
-    },
-
-    loadedHandler() {
-      model.initId();
-
-      const form = document.querySelector(CONSTANTS.formSelector);
-      const todoContainer = document.querySelector(CONSTANTS.todoContainerSelector);
-
-      form.addEventListener('submit', this.formHandler.bind(this));
-      todoContainer.addEventListener('click', this.removeHandler.bind(this));
-
-      model.get().forEach((item) => view.renderElement(item));
-    },
-
-    removeHandler(e) {
-      e.stopPropagation();
-      const { target } = e;
-      if (!target.hasAttribute(CONSTANTS.btnRemoveAttr)) return;
-
-      const todoId = +target.closest('[data-todo-item]').getAttribute(CONSTANTS.todoItemAttr);
-      const removedElement = model.removeElementById(todoId);
-
-      if (removedElement) {
-        view.removeElement(todoId);
-        return;
-      }
-      alert('Cannot remove element');
-    },
-
-    init() {
-      document.addEventListener('DOMContentLoaded', this.loadedHandler.bind(this));
-    },
-  };
-
-  controller.init();
-}());
+const student1 = new Student('Max', 'Aaa', 2002);
+// student1.getAge();
+student1.present();
+student1.setGrade(100)
+console.log(student1);
