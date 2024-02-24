@@ -3,8 +3,90 @@
   <head>
     <meta charset="UTF-8" />
     <title>Title</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <script defer src="js/script.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
-  <body></body>
+  <body>
+    <header>
+      <h1 class="text-center">Contacts</h1>
+    </header>
+
+    <main>
+      <section class="contacts">
+        <div class="container">
+          <div class="contacts__content">
+            <div class="input-group mb-3">
+              <label
+                for="contacts-search"
+                class="input-group-text"
+                id="basic-addon1"
+                >Search</label
+              >
+              <input
+                id="contacts-search"
+                type="text"
+                class="form-control"
+                placeholder="Contact"
+              />
+            </div>
+
+            <div class="contacts__list">
+              <ul class="list-group"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      data-bs-backdrop="static"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1
+              data-abonent-name
+              class="modal-title fs-5"
+              id="exampleModalLabel"
+            ></h1>
+          </div>
+          <div data-call-body class="modal-body"></div>
+          <div class="modal-footer">
+            <button data-end-call type="button" class="btn btn-danger">
+              End call
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="./js/vendor/Call.js"></script>
+    <script src="./js/vendor/CallController.js"></script>
+    <script src="./js/database/users.js"></script>
+
+    <script src="./js/User.js"></script>
+    <script src="./js/PhoneBook.js"></script>
+
+    <!--<script src="./js/script.js"></script>-->
+  </body>
 </html>
