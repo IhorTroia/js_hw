@@ -7,13 +7,13 @@ class CallController {
     this.#trackCallStatus();
   }
 
-  startCall(phoneNumber) {
+  startCall(phoneNumber, name) {
     if (this.#currentCall) {
       console.warn('You already have a call!');
       return this.#currentCall;
     }
 
-    this.#currentCall = new Call(phoneNumber);
+    this.#currentCall = new Call(phoneNumber, name);
   }
 
   #endCall() {
@@ -24,7 +24,7 @@ class CallController {
 
     this.#callHistory.push(Object.freeze(this.#currentCall));
     this.#currentCall = null;
-    console.log(this.#callHistory);
+    // console.log(this.#callHistory);
   }
 
   endCallByCaller() {

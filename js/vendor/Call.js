@@ -18,6 +18,8 @@ class Call {
 
   static changeStatusHandlers = [];
 
+  static durationHandlers = [];
+
   #timerId = null;
 
   #duration = 0;
@@ -28,12 +30,15 @@ class Call {
 
   #phone = null;
 
+  #name = null;
+
   #status = null;
 
-  constructor(phoneNumber) {
+  constructor(phoneNumber, name) {
     if (!Call.validatePhoneNumber(phoneNumber)) throw new Error('Number is not valid!');
 
     this.#phone = phoneNumber;
+    this.#name = name;
     this.#changeCallStatus(Call.CALL_STATUSES.connecting);
   }
 
@@ -79,7 +84,7 @@ class Call {
 
     this.#endCalcCallDuration();
     this.#endDate = new Date();
-    console.log(this);
+    // console.log(this);
   }
 
   endCallOutside() {
@@ -94,7 +99,7 @@ class Call {
   #startCalcCallDuration() {
     this.#timerId = setInterval(() => {
       this.#duration += 1;
-      console.log(this.#duration);
+      this.#durationEventHandlers(this.#duration);
     }, 1000);
   }
 
@@ -124,10 +129,24 @@ class Call {
     });
   }
 
-  static addChangeCallStatusListener(handler) {
-    if (typeof handler !== 'function') return null;
+  #durationEventHandlers(...data) {
+    Call.durationHandlers.forEach((handler) => {
+      handler(...data);
+    });
+  }
 
+  static addChangeCallStatusListener(handler) {
+    if (!Call.validateHandler(handler)) return null;
     Call.changeStatusHandlers.push(handler);
+  }
+
+  static addDurationListener(handler) {
+    if (!Call.validateHandler(handler)) return null;
+    Call.durationHandlers.push(handler);
+  }
+
+  static validateHandler(handler) {
+    return typeof handler === 'function';
   }
 
   static removeChangeCallStatusListener(handler) {
@@ -137,5 +156,21 @@ class Call {
     const index = Call.changeStatusHandlers.findIndex((item) => handler === item);
 
     Call.changeStatusHandlers.splice(index, 1);
+  }
+
+  get status() {
+    return this.#status;
+  }
+
+  get name() {
+    return this.#name;
+  }
+
+  get startDate() {
+    return this.#startDate;
+  }
+
+  get endDate() {
+    return this.#endDate;
   }
 }

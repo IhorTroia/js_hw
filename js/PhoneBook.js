@@ -55,6 +55,7 @@ class PhoneBook {
 
   #setEvents() {
     Call.addChangeCallStatusListener(this.#changeCallStatusHandler);
+    Call.addDurationListener(this.#durationHandler);
     document.querySelector('[data-end-call]').addEventListener('click', this.#endCallHandler);
     this.#usersListSelector.addEventListener('click', this.#removeHandler);
     this.#usersListSelector.addEventListener('click', this.#callHandler);
@@ -63,7 +64,16 @@ class PhoneBook {
   #changeCallStatusHandler = (callStatus) => {
     document.querySelector('[data-call-body]').innerHTML = callStatus;
 
-    if (callStatus === Call.CALL_STATUSES.disconnected || callStatus === Call.CALL_STATUSES.rejected) this.#modal.hide();
+    if (callStatus === Call.CALL_STATUSES.disconnected || callStatus === Call.CALL_STATUSES.rejected) {
+      this.#modal.hide();
+      document.querySelector('[data-duration]').innerHTML = '00:00';
+      this.renderCallHistory(this.#callControllerInstance.callHistory.at(-1));
+      console.log(this.#callControllerInstance.callHistory);
+    }
+  };
+
+  #durationHandler = (duration) => {
+    document.querySelector('[data-duration]').innerHTML = `00:0${duration}`;
   };
 
   #endCallHandler = () => {
@@ -92,7 +102,7 @@ class PhoneBook {
 
     document.querySelector('[data-abonent-name]').innerHTML = currentContact.name;
 
-    this.#callControllerInstance.startCall(currentContact.phone);
+    this.#callControllerInstance.startCall(currentContact.phone, currentContact.name);
 
     this.#modal.show();
   };
@@ -123,6 +133,20 @@ class PhoneBook {
     return template;
   }
 
+  renderCallHistory(call) {
+    const template = this.#createHistoryTemplate(call);
+    const text = document.querySelector('[data-history-text]');
+    if (text) text.remove();
+    document.querySelector('[data-list-history]').appendChild(template);
+  }
+
+  #createHistoryTemplate({ name, status, endDate }) {
+    const template = document.createElement('li');
+    template.className = 'list-group-item d-flex justify-content-between align-items-center';
+    template.innerHTML = `${name} | ${endDate} | Status: ${status}`;
+    return template;
+  }
+
   static validateContact(user) {
     return !!user.id;
   }
@@ -139,4 +163,4 @@ const phoneBook = new PhoneBook(
   'data-call',
   '#exampleModal',
 );
-console.log(phoneBook);
+// console.log(phoneBook);
