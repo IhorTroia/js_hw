@@ -41,25 +41,53 @@ class PhoneBook {
     this.renderContact(this.#contacts.at(-1));
   }
 
-  call(contactId) {
-    // find contact in this.#contacts and make a call
-  }
-
-  removeContact(contactId) {
-    // will remove contact from this.#contacts
-  }
-
-  search() {
-    // will search contact by: name, phone, email
-  }
-
   #setEvents() {
     Call.addChangeCallStatusListener(this.#changeCallStatusHandler);
     Call.addDurationListener(this.#durationHandler);
     document.querySelector('[data-end-call]').addEventListener('click', this.#endCallHandler);
+    document.querySelector('[data-search-btn]').addEventListener('click', this.searchHandler);
     this.#usersListSelector.addEventListener('click', this.#removeHandler);
     this.#usersListSelector.addEventListener('click', this.#callHandler);
   }
+
+  searchHandler = () => {
+    const searchInput = document.querySelector('#contacts-search');
+    const searchValue = searchInput.value.trim();
+
+    if (!searchValue || typeof searchValue !== 'string') return null;
+
+    this.#usersListSelector.innerHTML = '';
+    this.#contacts.forEach((user) => {
+      if (user.name.includes(searchValue)) {
+        this.#searchedUsers.push(user);
+        this.renderContact(user);
+      }
+    });
+
+    const inputLine = document.querySelector('[data-input-line]');
+    if (document.querySelector('[data-reset-btn]')) return null;
+    const resetBtn = document.createElement('button');
+    resetBtn.setAttribute('data-reset-btn', '');
+    resetBtn.className = 'btn btn-outline-danger';
+    resetBtn.innerHTML = 'Reset';
+    resetBtn.addEventListener('click', this.#resetSearchHandler);
+    inputLine.appendChild(resetBtn);
+    console.log(this.#searchedUsers);
+  };
+
+  #resetSearchHandler = ({ target }) => {
+    target.remove();
+
+    const searchInput = document.querySelector('#contacts-search');
+    searchInput.value = '';
+
+    this.#searchedUsers.length = 0;
+    this.#usersListSelector.innerHTML = '';
+
+    this.#contacts.forEach((user) => {
+      this.renderContact(user);
+    });
+  };
 
   #changeCallStatusHandler = (callStatus) => {
     document.querySelector('[data-call-body]').innerHTML = callStatus;

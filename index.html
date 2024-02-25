@@ -24,12 +24,12 @@
       <section class="contacts">
         <div class="container">
           <div class="contacts__content">
-            <div class="input-group mb-3">
+            <div data-input-line class="input-group mb-3">
               <label
                 for="contacts-search"
                 class="input-group-text"
                 id="basic-addon1"
-                >Search</label
+                >Input name</label
               >
               <input
                 id="contacts-search"
@@ -37,6 +37,13 @@
                 class="form-control"
                 placeholder="Contact"
               />
+              <button
+                data-search-btn
+                class="btn btn-outline-success"
+                type="submit"
+              >
+                Search
+              </button>
             </div>
 
             <div class="contacts__list">
