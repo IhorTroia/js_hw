@@ -3,8 +3,8 @@ const domSelectors = {
   loader: '.loader',
   tableContent: '.content',
   viewModalSelector: '#userView',
-  editModalSelector: null,
-  deleteModalSelector: null,
+  editModalSelector: '#userEdit',
+  deleteModalSelector: '#userDelete',
 };
 
 const fieldsToOutput = ['id', 'name', 'email', 'phone', 'website'];

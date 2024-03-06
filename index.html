@@ -70,16 +70,6 @@
       </div>
     </main>
 
-    <!-- Button trigger modal -->
-    <button
-      type="button"
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#userView"
-    >
-      Launch demo modal
-    </button>
-
     <!-- View User -->
     <div
       class="modal fade"
@@ -108,6 +98,112 @@
               data-bs-dismiss="modal"
             >
               Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--    Edit user-->
+
+    <div
+      class="modal fade"
+      id="userEdit"
+      tabindex="-1"
+      aria-labelledby="userEditLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="userEditLabel">Edit User</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form data-edit-form>
+              <div class="mb-3">
+                <label for="editName" class="col-form-label">Name:</label>
+                <input type="text" class="form-control" id="editName" />
+              </div>
+              <div class="mb-3">
+                <label for="editEmail" class="col-form-label">Email:</label>
+                <input type="email" class="form-control" id="editEmail" />
+              </div>
+              <div class="mb-3">
+                <label for="editPhone" class="col-form-label">Phone:</label>
+                <input type="text" class="form-control" id="editPhone" />
+              </div>
+              <div class="mb-3">
+                <label for="editWebsite" class="col-form-label">Website:</label>
+                <input type="text" class="form-control" id="editWebsite" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              data-modal-btn-edit
+              data-bs-dismiss="modal"
+              type="button"
+              class="btn btn-primary"
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  Delete user  -->
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="userDelete"
+      tabindex="-1"
+      aria-labelledby="userDeleteLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="userDeleteLabel">Warning</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure that you want to delete this user?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              No!
+            </button>
+            <button
+              data-bs-dismiss="modal"
+              data-modal-btn-delete
+              type="button"
+              class="btn btn-danger"
+            >
+              Yes!
             </button>
           </div>
         </div>

@@ -9,6 +9,10 @@ class View {
 
   #viewModalSelector = null;
 
+  #editModalSelector = null;
+
+  #deleteModalSelector = null;
+
   #table = null;
 
   #viewModal = null;
@@ -27,8 +31,10 @@ class View {
     this.#table = document.querySelector(this.#tableSelector);
     this.#viewModalSelector = document.querySelector(selectors.viewModalSelector);
     this.#viewModal = new bootstrap.Modal(this.#viewModalSelector);
-    // this.#editModal = new bootstrap.Modal(selectors.editModalSelector);
-    // this.#deleteModal = new bootstrap.Modal(selectors.deleteModalSelector);
+    this.#editModalSelector = document.querySelector(selectors.editModalSelector);
+    this.#editModal = new bootstrap.Modal(this.#editModalSelector);
+    this.#deleteModalSelector = document.querySelector(selectors.deleteModalSelector);
+    this.#deleteModal = new bootstrap.Modal(this.#deleteModalSelector);
     this.#modals = {
       view: this.#viewModal,
       edit: this.#editModal,
@@ -82,6 +88,12 @@ class View {
                     <i class="bi bi-trash"></i>
                   </button>`;
     return td;
+  }
+
+  async updateTableRow(user, currentTableRow) {
+    const newRow = currentTableRow;
+    const tableRow = this.createTableRow(user);
+    newRow.replaceWith(tableRow);
   }
 
   prepareViewModal(data) {
