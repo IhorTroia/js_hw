@@ -23,20 +23,27 @@ class Albums {
     albumContainer.append(hr);
   }
 
+  #renderPhotoTemplate(photo) {
+    const albumContainer = document.querySelector('[data-albums-list]');
+    albumContainer.append(photo);
+  }
+
   #createAlbumTemplate(album) {
-    const albumItem = document.createElement('a');
-    albumItem.setAttribute('href', './photos.html');
-    albumItem.setAttribute('target', '_blank');
+    const albumItem = document.createElement('div');
     albumItem.setAttribute('data-album-id', album.id);
-    albumItem.className = 'list-group-item list-group-item-action';
     albumItem.innerHTML = `ID: ${album.id} | Name: ${album.title}`;
 
     this.#renderAlbumTemplate(albumItem);
   }
 
-  #createPhotosTemplate(photos) {
-    const l = document.querySelector('[data-photos-list]');
-    console.log(l);
+  #createPhotoTemplate(photo) {
+    const img = document.createElement('img');
+    img.className = 'rounded mb-3';
+    img.setAttribute('src', photo.url);
+    img.style.maxWidth = '200px';
+    img.style.maxHeight = '200px';
+
+    this.#renderPhotoTemplate(img);
   }
 
   #setEvents() {
@@ -49,7 +56,12 @@ class Albums {
 
     const albumId = target.getAttribute('data-album-id');
     const photos = await this.#getPhotosByAlbumId(albumId);
-    await this.#createPhotosTemplate(photos);
+    console.log(photos);
+    const albumContainer = document.querySelector('[data-albums-list]');
+    albumContainer.innerHTML = '';
+    await photos.forEach((photo) => {
+      this.#createPhotoTemplate(photo);
+    });
   };
 
   #loadedHandler = async () => {
